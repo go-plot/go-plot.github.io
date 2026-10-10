@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ .Site.Title }} — matplotlib-class figures in pure Go</title>
+<meta name="description" content="{{ .Site.Params.description }}">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+{{ partial "styles.html" . }}
+</head>
+<body class="lm">
+  <header class="nav"><div class="wrap">
+    <a class="brand" href="/"><img class="glyph" src="/img/logo.svg" width="32" height="32" alt="go-plot logo"> {{ .Site.Title }}</a>
+    <nav><a href="#figure">Example</a><a href="#features">Why</a><a href="#exact">Exactness</a><a href="#speed">Speed</a><a href="#repos">Repositories</a></nav>
+    {{ partial "theme-toggle.html" . }}
+  </div></header>
+  {{ partial "fork-ribbon.html" "https://github.com/go-plot/plot" }}
+
+  <div class="hero"><div class="wrap">
+    <div>
+      <h1 class="head">matplotlib's figures, in pure Go.<br><span class="accent">Tested equal where they can be equal.</span></h1>
+      <p class="sub">go-plot is the plotting library of the Go scientific stack built on <b>go-ndarray</b>. Its <b>object model and defaults are matplotlib's</b> — figure size, fonts, colour cycle, margins, tick placement and tick labels — so a figure looks the way a matplotlib user expects. It writes <b>SVG and PNG</b>, sets labels with a <b>real TeX math typesetter</b>, and needs no Python and no cgo: one static binary, <code>js/wasm</code> included.</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://go-plot.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation →</a>
+      </div>
+      <div class="trust"><span><b>408</b> axes of ticks, bit for bit</span><span><b>{{ len .Site.Params.checks }}</b> kinds of check against matplotlib</span><span><b>100%</b> test coverage</span></div>
+    </div>
+    {{/* go-plot/plot v0.1.0, tools/compare/readme/main.go, verbatim but for
+         the package clause and imports. It drew the figure in #figure. */}}
+    <div class="term">
+      <div class="bar"><i style="background:#ff5f57"></i><i style="background:#febc2e"></i><i style="background:#28c840"></i><span class="t">main.go</span></div>
+<pre style="white-space:pre;overflow-x:auto;tab-size:4"><span class="c-cmd">func</span> main() {
+	x := make([]<span class="c-key">float64</span>, <span class="c-num">200</span>)
+	<span class="c-cmd">for</span> i := <span class="c-cmd">range</span> x {
+		x[i] = <span class="c-key">float64</span>(i) / <span class="c-num">199</span> * <span class="c-num">10</span>
+	}
+	sin, damped := make([]<span class="c-key">float64</span>, len(x)), make([]<span class="c-key">float64</span>, len(x))
+	<span class="c-cmd">for</span> i, v := <span class="c-cmd">range</span> x {
+		sin[i] = math.Sin(v)
+		damped[i] = math.Exp(-v/<span class="c-num">4</span>) * math.Cos(<span class="c-num">2</span>*v)
+	}
+
+	fig, axs := plot.Subplots(<span class="c-num">1</span>, <span class="c-num">1</span>, plot.FigSize(<span class="c-num">6.4</span>, <span class="c-num">4</span>))
+	ax := axs[<span class="c-num">0</span>][<span class="c-num">0</span>]
+	ax.Plot(x, sin, plot.Label(<span class="c-str">`$\sin t$`</span>))
+	ax.Plot(x, damped, plot.Label(<span class="c-str">`$e^{-t/4}\cos 2t$`</span>), plot.LineStyle(<span class="c-str">"--"</span>))
+	ax.FillBetween(x, damped, <span class="c-cmd">nil</span>, plot.Alpha(<span class="c-num">0.2</span>))
+	ax.SetTitle(<span class="c-str">`Two signals, labelled in TeX`</span>)
+	ax.SetXLabel(<span class="c-str">`time $t$ (s)`</span>)
+	ax.SetYLabel(<span class="c-str">"amplitude"</span>)
+	ax.Grid(<span class="c-cmd">true</span>)
+	ax.Legend()
+	<span class="c-cmd">if</span> err := fig.SaveSVG(os.Stdout); err != <span class="c-cmd">nil</span> {
+		panic(err)
+	}
+}</pre>
+    </div>
+  </div></div>
+
+  <div class="strip"><div class="wrap">
+    <span class="lead-line">{{ len .Site.Params.repos }} repositories — <b>one library</b>: <code>go get github.com/go-plot/plot</code></span>
+    <div class="mods">{{ range .Site.Params.repos }}<a href="{{ .href }}">{{ .name }}</a>{{ end }}</div>
+  </div></div>
+
+  <section id="figure" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">Ask it, do not take our word</span>
+    <h2>The program above, <i>actually run</i>.</h2>
+    <p class="lead">This is the SVG it writes, unedited: two lines from the colour cycle, a dashed style, a translucent fill, a grid, a legend placed where it covers the least data, and labels set in TeX. Twelve reference figures drawn by both go-plot and matplotlib put every axes frame and every tick mark on the same pixel, and after <code>TightLayout</code> within 2 pixels.</p>
+    {{/* static/img/figure.svg: written by the program in the hero, with
+         github.com/go-plot/plot v0.1.0 and Go 1.27.2, on 2026-10-10.
+         Regenerate it when the version changes; never edit it by hand. */}}
+    <div class="card" style="margin-top:22px;padding:18px;background:#fff;text-align:center">
+      <img src="/img/figure.svg" alt="Two signals, sin t and a damped cosine, with TeX labels and a legend, drawn by go-plot v0.1.0" style="max-width:100%;height:auto" width="640" height="400">
+    </div>
+  </div></section>
+
+  <section id="features"><div class="wrap">
+    <span class="eyebrow">Why go-plot</span>
+    <h2>The plotting library notebooks <i>reach for first</i>.</h2>
+    <p class="lead">A census of 339 scientific notebooks ranks plotting first among the things that keep them from moving to Go, and most of them write <code>fig, ax = plt.subplots(); ax.plot(...)</code>. go-plot is that API, under the same names, with Go's argument style.</p>
+    <div class="grid">
+      <div class="card"><div class="ico">📐</div><h3>matplotlib's object model</h3><p><code>Subplots</code>, <code>Plot</code>, <code>SetXLabel</code>, <code>Legend</code>, <code>SetTitle</code>, <code>TightLayout</code>, <code>SetYLim</code>, <code>Axhline</code>: every call the census ranks, named as in matplotlib. Keyword arguments become options: <code>plot.Color("C1")</code>.</p></div>
+      <div class="card"><div class="ico">🎯</div><h3>Tested equal to matplotlib</h3><p>Tick locations and labels, colormaps, named colours, and the layout of figures are compared with fixtures generated by matplotlib 3.11.2 itself, exactly unless stated.</p></div>
+      <div class="card"><div class="ico">∑</div><h3>Real TeX in the labels</h3><p><code>$...$</code> is typeset by <a href="https://github.com/go-tex/math">go-tex/math</a> with STIX Two Math: fractions, radicals, big operators, limits and matrices, as TeX lays them out.</p></div>
+      <div class="card"><div class="ico">🧮</div><h3>Data from go-ndarray</h3><p>Every data argument takes <code>[]float64</code>, other numeric slices, or a <code>*ndarray.Array</code> of any of its thirteen dtypes.</p></div>
+      <div class="card"><div class="ico">🖼️</div><h3>SVG, PNG, and notebooks</h3><p><code>SaveSVG</code> writes vector paths, <code>SavePNG</code> anti-aliased pixels, and <code>Display</code> hands a notebook kernel both.</p></div>
+      <div class="card"><div class="ico">📦</div><h3>Pure Go, CGO=0</h3><p>No Python, no C. It builds for the six 64-bit Linux targets, 386, arm, <code>js/wasm</code> and <code>wasip1/wasm</code>.</p></div>
+      <div class="card"><div class="ico">✅</div><h3>100% test coverage</h3><p>Gated in CI on three operating systems, with six architectures.</p></div>
+      <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>Every repository of the organization.</p></div>
+    </div>
+  </div></section>
+
+  <section id="exact" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">What equals matplotlib</span>
+    <h2>{{ len .Site.Params.checks }} checks, each <i>generated by matplotlib</i>.</h2>
+    <p class="lead">The fixtures are written by scripts that call matplotlib, committed, and compared in the tests. What is not equal — text rasterisation, contour vertices, image resampling — is listed in the documentation, not hidden.</p>
+    <div class="grid">
+      {{ range .Site.Params.checks }}
+      <div class="card"><h3>{{ .name }}</h3><p>{{ .what | markdownify }}</p></div>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="speed" style="padding-top:10px"><div class="wrap">
+    <span class="eyebrow">Speed</span>
+    <h2>Faster than matplotlib on <i>every case measured</i>.</h2>
+    <p class="lead">In-process time, medians of 9 interleaved fresh-process runs per case on a shared, loaded 16-core Apple M4 Max, 2026-10-10. Python's start and <code>import matplotlib.pyplot</code> (about 0.5 s) are not counted.</p>
+    <div class="tablewrap">
+      <table class="bench">
+        <thead><tr><th>figure</th><th>go-plot</th><th>matplotlib 3.11.2</th><th>ratio</th></tr></thead>
+        <tbody>
+          <tr class="win"><td>1e6-point line → PNG</td><td>0.055 s</td><td>0.065 s</td><td class="xm">1.2x</td></tr>
+          <tr class="win"><td>1e6-point line → SVG</td><td>0.019 s</td><td>0.053 s</td><td class="xm">2.8x</td></tr>
+          <tr class="win"><td>1000² imshow → PNG</td><td>0.025 s</td><td>0.042 s</td><td class="xm">1.7x</td></tr>
+          <tr class="win"><td>1000² imshow → SVG</td><td>0.020 s</td><td>0.042 s</td><td class="xm">2.1x</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div></section>
+
+  <section id="repos" style="padding-top:20px"><div class="wrap">
+    <span class="eyebrow">Repositories</span>
+    <h2>What is here.</h2>
+    <div class="road">
+      {{ range .Site.Params.repos }}
+      <div class="ph">
+        <div class="top"><h4><a href="{{ .href }}">{{ .name }}</a></h4><span class="tag active">{{ .kind }}</span></div>
+        <p>{{ .blurb | safeHTML }}</p>
+      </div>
+      {{ end }}
+    </div>
+  </div></section>
+
+  <section id="eco" style="padding-top:6px"><div class="wrap">
+    <div class="band">
+      <h2>Plots for the Go scientific stack.</h2>
+      <p>go-plot draws the data of <a href="https://github.com/go-ndarray/ndarray"><u>go-ndarray</u></a>, and a <a href="https://github.com/go-notebook/notebook"><u>go-notebook</u></a> cell shows a figure through <code>Display</code>. What is not in v0 yet — symlog and date axes, <code>constrained_layout</code>, boxplot and pie, PDF, windows — is listed in the <a href="https://go-plot.github.io/docs/"><u>documentation</u></a>.</p>
+      <a class="btn btn-ghost" href="https://github.com/go-plot/plot">{{ partial "icons/github.html" . }}Read the source on GitHub →</a>
+    </div>
+  </div></section>
+
+  <footer><div class="wrap"><span>go-plot · <a href="https://github.com/go-plot">go-plot on GitHub</a> · BSD-3-Clause</span><span>data in · figures out</span></div></footer>
+</body>
+</html>
