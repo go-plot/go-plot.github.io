@@ -55,6 +55,9 @@ disableKinds = ['taxonomy', 'term', 'rss', 'sitemap', '404']
   name = "Layout, then TightLayout"
   what = "15 kinds of figure at two sizes: every Axes position and view limit to 1e-9 relative, every tick label exactly. After `TightLayout` (6 kinds at two sizes), every Axes edge within 0.005 of the figure."
 [[params.checks]]
+  name = "Pie, vertex for vertex"
+  what = "Ten `ax.pie` cases (labels, percentages, explode, clockwise, donut, zeros, one wedge, rotated labels, a partial pie, a legend): every wedge path vertex to 1e-12, every label's text, position and alignment exactly, the refusals of negative, NaN and all-zero sizes; at least 99% of the pixels agree with matplotlib's PNG."
+[[params.checks]]
   name = "Pixels, side by side"
   what = "Twelve reference figures drawn by both put every axes frame and tick mark on the same pixel, and after `TightLayout` within 2 pixels; two deliberately shifted figures must fail, and do."
 
