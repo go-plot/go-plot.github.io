@@ -19,10 +19,9 @@
   <div class="hero"><div class="wrap">
     <div>
       <h1 class="head">matplotlib's figures, in pure Go.<br><span class="accent">Tested equal where they can be equal.</span></h1>
-      <p class="sub">go-plot is the plotting library of the Go scientific stack built on <b>go-ndarray</b>. Its <b>object model and defaults are matplotlib's</b> — figure size, fonts, colour cycle, margins, tick placement and tick labels — so a figure looks the way a matplotlib user expects. It writes <b>SVG and PNG</b>, sets labels with a <b>real TeX math typesetter</b>, and needs no Python and no cgo: one static binary, <code>js/wasm</code> included.</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://go-plot.github.io/docs/">{{ partial "icons/book.html" . }}Read the documentation →</a>
-      </div>
+      <p class="sub">go-plot is the plotting library of the Go scientific stack built on <b>go-ndarray</b>. Its <b>object model and defaults are matplotlib's</b> — figure size, fonts, colour cycle, margins, tick placement and tick labels — so a figure looks the way a matplotlib user expects. It writes <b>SVG and PNG</b>, sets labels with a <b>real TeX math typesetter</b>, and needs no Python and {{ if not (partial "mantra-on.html" $) }}no cgo{{ end }}: one static binary, <code>js/wasm</code> included.</p>
+      {{/* [[params.cta]] in hugo.toml: the kit renders the row */}}
+      {{ partial "cta.html" . }}
       <div class="trust"><span><b>408</b> axes of ticks, bit for bit</span><span><b>{{ len .Site.Params.checks }}</b> kinds of check against matplotlib</span><span><b>100%</b> test coverage</span></div>
     </div>
     {{/* go-plot/plot v0.1.0, tools/compare/readme/main.go, verbatim but for
@@ -85,9 +84,9 @@
       <div class="card"><div class="ico">🧮</div><h3>Data from go-ndarray</h3><p>Every data argument takes <code>[]float64</code>, other numeric slices, or a <code>*ndarray.Array</code> of any of its thirteen dtypes.</p></div>
       <div class="card"><div class="ico">🖼️</div><h3>SVG, PNG, and notebooks</h3><p><code>SaveSVG</code> writes vector paths, <code>SavePNG</code> anti-aliased pixels, and <code>Display</code> hands a notebook kernel both. The SVG inlines under a strict Content-Security-Policy: no script, no style attribute, no external reference, text as outlines.</p></div>
       <div class="card"><div class="ico">🥧</div><h3>Pie and donut charts</h3><p><code>Pie</code> is <code>ax.pie</code>: labels, <code>AutoPct</code> percentages, explode, start angle, direction, a legend. <code>Donut</code> draws a ring. Labels from data can skip TeX (<code>PlainText</code>), and thin wedges' labels can be spread apart (<code>SpreadLabels</code>).</p></div>
-      <div class="card"><div class="ico">📦</div><h3>Pure Go, CGO=0</h3><p>No Python, no C. It builds for the six 64-bit Linux targets, 386, arm, <code>js/wasm</code> and <code>wasip1/wasm</code>.</p></div>
+      {{ if not (partial "mantra-on.html" $) }}<div class="card"><div class="ico">📦</div><h3>Pure Go, CGO=0</h3><p>No Python, no C. It builds for the six 64-bit Linux targets, 386, arm, <code>js/wasm</code> and <code>wasip1/wasm</code>.</p></div>{{ end }}
       <div class="card"><div class="ico">✅</div><h3>100% test coverage</h3><p>Gated in CI on three operating systems, with six architectures.</p></div>
-      <div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>Every repository of the organization.</p></div>
+      {{ if not (partial "mantra-on.html" $) }}<div class="card"><div class="ico">⚖️</div><h3>BSD-3-Clause</h3><p>Every repository of the organization.</p></div>{{ end }}
     </div>
   </div></section>
 
